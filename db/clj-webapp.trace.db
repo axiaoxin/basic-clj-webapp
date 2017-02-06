@@ -1,0 +1,12 @@
+02-06 11:09:39 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "LOCATIONS" not found; SQL statement:
+select x,y from locations where id = 1 [42102-170]
+02-06 11:11:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "LOCATIONS" not found; SQL statement:
+INSERT INTO locations (x,y) VALUES (?,?) [42102-170]
+02-06 11:11:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "LOCATIONS" not found; SQL statement:
+INSERT INTO locations (x,y) VALUES (?,?) [42102-170]
+02-06 11:11:01 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "LOCATIONS" not found; SQL statement:
+INSERT INTO locations (x,y) VALUES (?,?) [42102-170]
