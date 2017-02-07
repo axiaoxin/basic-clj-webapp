@@ -16,3 +16,8 @@
 (stop-server)
 (start-server)
 (stop-server)
+(use 'guestbook.models.db)
+(create-guestbook-table)
+(use 'guestbook.models.db)
+(save-message "Bob" "hi")
+(read-guests)
