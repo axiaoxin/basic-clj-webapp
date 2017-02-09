@@ -3,6 +3,7 @@
   :url "http://example.com/FIXME"
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [compojure "1.1.6"]
+                 [lib-noir "0.9.9"]
                  [hiccup "1.0.5"]
                  [ring-server "0.3.1"]
                  [org.clojure/java.jdbc "0.2.3"]
