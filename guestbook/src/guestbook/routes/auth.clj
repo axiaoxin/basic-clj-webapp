@@ -5,19 +5,18 @@
             [hiccup.form :refer
               [form-to label text-field password-field submit-button]]))
 
+(defn control [field name text]
+  (list (label name text)
+        (field name)
+        [:br]))
+
 (defn registration-page []
   (layout/common
     (form-to [:post "/register"]
-             (label "id" "screen name")
-             (text-field "id")
-             [:br]
-             (label "pass" "password")
-             (password-field "pass")
-             [:br]
-             (label "pass1" "retype password")
-             (password-field "pass1")
-             [:br]
-              (submit-button "create account"))))
+      (control text-field :id "screen name")
+      (control password-field :pass "password")
+      (control password-field :pass1 "retype password")
+      (submit-button "create account"))))
 
 (defroutes auth-routes
   (GET "/register" [] (registration-page))
