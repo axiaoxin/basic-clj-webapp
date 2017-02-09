@@ -1,8 +1,9 @@
 (ns guestbook.routes.auth
   (:require [compojure.core :refer [defroutes GET POST]]
             [guestbook.views.layout :as layout]
+            [noir.response :refer [redirect]]
             [hiccup.form :refer
-              [form-to label text-field password-field submit-field]]))
+              [form-to label text-field password-field submit-button]]))
 
 (defn registration-page []
   (layout/common
@@ -17,3 +18,10 @@
              (password-field "pass1")
              [:br]
               (submit-button "create account"))))
+
+(defroutes auth-routes
+  (GET "/register" [] (registration-page))
+  (POST "/register" [id pass pass1]
+        (if (= pass pass1)
+          (redirect "/")
+          (registration-page))))
