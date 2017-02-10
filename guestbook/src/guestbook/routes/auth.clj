@@ -3,11 +3,16 @@
             [guestbook.views.layout :as layout]
             [noir.response :refer [redirect]]
             [noir.session :as session]
+            [noir.validation :refer [rule errors? has-value? on-error]]
             [hiccup.form :refer
               [form-to label text-field password-field submit-button]]))
 
+(defn format-error [[error]]
+  [:p.error error])
+
 (defn control [field name text]
-  (list (label name text)
+  (list (on-error name format-error)
+        (label name text)
         (field name)
         [:br]))
 
@@ -21,13 +26,12 @@
 
 (defn login-page [& [error]]
   (layout/common
-    (if error [:div.error "Login error: " error])
     (form-to [:post "/login"]
       (control text-field :id "screen name")
       (control password-field :pass "password")
       (submit-button "login"))))
 
-(defn handler-login [id pass]
+(defn handler-login-dead [id pass]
   (cond
     (empty? id)
     (login-page "screen name is required")
@@ -39,6 +43,22 @@
       (redirect "/"))
     :else
     (login-page "authentication failed")))
+
+(defn handler-login [id pass]
+  (rule (has-value? id)
+    [:id "screen name is required"])
+  (rule (has-value? pass)
+    [:pass "password is required"])
+  (rule (= id "foo")
+    [:id "unknown user"])
+  (rule (= pass "bar")
+    [:pass "invalid password"])
+
+  (if (errors? :id :pass)
+    (login-page)
+    (do
+      (session/put! :user id)
+      (redirect "/"))))
 
 (defroutes auth-routes
   (GET "/register" [] (registration-page))

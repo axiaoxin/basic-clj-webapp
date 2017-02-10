@@ -6,6 +6,7 @@
             [compojure.handler :as handler]
             [compojure.route :as route]
             [noir.session :as session]
+            [noir.validation :refer [wrap-noir-validation]]
             [ring.middleware.session.memory :refer [memory-store]]
             [guestbook.routes.home :refer [home-routes]]
             [guestbook.routes.auth :refer [auth-routes]]
@@ -28,4 +29,5 @@
         (routes auth-routes home-routes app-routes))
       (wrap-base-url)
       (session/wrap-noir-session
-        (:store (memory-store)))))
+        (:store (memory-store)))
+      (wrap-noir-validation)))
