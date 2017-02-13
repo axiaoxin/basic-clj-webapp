@@ -3,7 +3,8 @@
             [guestbook.views.layout :as layout]
             [hiccup.form :refer :all]
             [guestbook.models.db :as db]
-            [noir.session :as session]))
+            [noir.session :as session]
+            [noir.response :as response]))
 
 (defn format-time [timestamp]
   (-> "dd/MM/yyyy"
@@ -42,8 +43,16 @@
       (db/save-message name message)
       (home))))
 
+(defn mime-type [type]
+  (cond
+    (= type "plain")
+    (response/content-type "text/plain" "some plain text")
+    (= type "json")
+    (response/json {:message "everything went better than expected!"})))
+
 (defroutes home-routes
   (GET "/" [] (home))
   (POST "/" [name message] (save-message name message))
-  (GET "/request-keys" request (interpose ", " (keys request))))
+  (GET "/request-keys" request (interpose ", " (keys request)))
+  (GET "/mime/:type" [type] (mime-type type)))
 
