@@ -1,8 +1,10 @@
 (ns guestbook.routes.auth
   (:require [compojure.core :refer [defroutes GET POST]]
             [guestbook.views.layout :as layout]
+            [guestbook.models.db :as db]
             [noir.response :refer [redirect]]
             [noir.session :as session]
+            [noir.util.crypt :as crypt]
             [noir.validation :refer [rule errors? has-value? on-error]]
             [hiccup.form :refer
               [form-to label text-field password-field submit-button]]))
@@ -24,6 +26,15 @@
       (control password-field :pass1 "retype password")
       (submit-button "create account"))))
 
+(defn handle-registration [id pass pass1]
+  (rule (= pass pass1)
+    [:pass "pasword was not retyped correctly"])
+  (if (errors? :pass)
+    (registration-page)
+    (do
+      (db/add-user-record {:id id :pass (crypt/encrypt pass)})
+      (redirect "/login"))))
+
 (defn login-page [& [error]]
   (layout/common
     (form-to [:post "/login"]
@@ -31,7 +42,7 @@
       (control password-field :pass "password")
       (submit-button "login"))))
 
-(defn handler-login-dead [id pass]
+(defn handle-login-old-no-use [id pass]
   (cond
     (empty? id)
     (login-page "screen name is required")
@@ -44,31 +55,27 @@
     :else
     (login-page "authentication failed")))
 
-(defn handler-login [id pass]
-  (rule (has-value? id)
-    [:id "screen name is required"])
-  (rule (has-value? pass)
-    [:pass "password is required"])
-  (rule (= id "foo")
-    [:id "unknown user"])
-  (rule (= pass "bar")
-    [:pass "invalid password"])
-
-  (if (errors? :id :pass)
-    (login-page)
-    (do
-      (session/put! :user id)
-      (redirect "/"))))
+(defn handle-login [id pass]
+  (let [user (db/get-user id)]
+    (rule (has-value? id)
+      [:id "screen name is required"])
+    (rule (has-value? pass)
+      [:pass "password is required"])
+    (rule (and user (crypt/compare pass (:pass user)))
+      [:pass "invalid password"])
+    (if (errors? :id :pass)
+      (login-page)
+      (do
+        (session/put! :user id)
+        (redirect "/")))))
 
 (defroutes auth-routes
   (GET "/register" [] (registration-page))
   (POST "/register" [id pass pass1]
-        (if (= pass pass1)
-          (redirect "/")
-          (registration-page)))
+        (handle-registration id pass pass1))
   (GET "/login" [] (login-page))
   (POST "/login" [id pass]
-        (handler-login id pass))
+        (handle-login id pass))
   (GET "/logout" []
         (layout/common
           (form-to [:post "/logout"]
