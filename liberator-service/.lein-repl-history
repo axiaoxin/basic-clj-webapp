@@ -1,0 +1,2 @@
+(use 'liberator-service.repl)
+(start-server)

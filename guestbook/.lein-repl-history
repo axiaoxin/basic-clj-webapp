@@ -43,3 +43,8 @@
 (create-user-table)
 (require '[guestbook.models.db.create-user-table :as cut])
 (require '[guestbook.models.db :as db])
+(require '[noir])
+(require '[noir.io :as io])
+(io/get-resource)
+(io/get-resource "E:")
+(io/get-resource "E:\")

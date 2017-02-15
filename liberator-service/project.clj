@@ -1,17 +1,16 @@
-(defproject guestbook "0.1.0-SNAPSHOT"
+(defproject liberator-service "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [compojure "1.1.6"]
-                 [lib-noir "0.9.9"]
                  [hiccup "1.0.5"]
-                 [ring-server "0.3.1"]
-                 [org.clojure/java.jdbc "0.2.3"]
-                 [org.xerial/sqlite-jdbc "3.7.2"]]
+                 [liberator "0.14.1"]
+                 [cheshire "5.7.0"]
+                 [ring-server "0.3.1"]]
   :plugins [[lein-ring "0.8.12"]]
-  :ring {:handler guestbook.handler/app
-         :init guestbook.handler/init
-         :destroy guestbook.handler/destroy}
+  :ring {:handler liberator-service.handler/app
+         :init liberator-service.handler/init
+         :destroy liberator-service.handler/destroy}
   :profiles
   {:uberjar {:aot :all}
    :production
