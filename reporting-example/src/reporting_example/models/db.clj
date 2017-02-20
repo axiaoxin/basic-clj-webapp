@@ -2,10 +2,10 @@
   (:require [clojure.java.jdbc :as sql]))
 
 
-(def db (:subprotocal "postgresql"
+(def db {:subprotocol "postgresql"
          :subname "//localhost/reporting"
          :user "admin"
-         :password "admin"))
+         :password "admin"})
 
 (defn create-employee-table []
   (sql/create-table
@@ -15,18 +15,20 @@
     [:place "varchar(50)"]
     [:country "varchar(50)"]))
 
-(sql/with-connection
-  db
-  (create-employee-table)
-  (sql/insert-rows
-    :employee
-    ["Albert Einstein", "Engineer", "Ulm", "Germany"]
-    ["Alfred Hitchcock", "Movie Director", "London", "UK"]
-    ["Wernher Von Braun", "Rocket Scientist", "Wyrzysk", "Poland"]
-    ["Sigmund Freud", "Neurologist", "Pribor", "Czech Republic"]
-    ["Mahatma Gandhi", "Lawyer", "Gujarat", "India"]
-    ["Sachin Tendulkar", "Cricket Player", "Mumbai", "India"]
-    ["Michael Schumacher", "F1 Racer", "Cologne", "Germany"]))
+;; init db
+; (sql/with-connection
+;   db
+;   (create-employee-table)
+;   (sql/insert-rows
+;     :employee
+;     ["Albert Einstein", "Engineer", "Ulm", "Germany"]
+;     ["Alfred Hitchcock", "Movie Director", "London", "UK"]
+;     ["Wernher Von Braun", "Rocket Scientist", "Wyrzysk", "Poland"]
+;     ["Sigmund Freud", "Neurologist", "Pribor", "Czech Republic"]
+;     ["Mahatma Gandhi", "Lawyer", "Gujarat", "India"]
+;     ["Sachin Tendulkar", "Cricket Player", "Mumbai", "India"]
+;     ["Michael Schumacher", "F1 Racer", "Cologne", "Germany"]))
 
 (defn read-employees []
-  (sql/with-connection db))
+  (sql/with-connection db
+    (sql/with-query-results rs ["select * from employee"] (doall rs))))

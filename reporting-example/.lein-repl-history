@@ -1,0 +1,45 @@
+(ns reporting-example.models.db
+  (:require [clojure.java.jdbc :as sql]))
+(def db (:subprotocal "postgresql"
+         :subname "//localhost/reporting"
+         :user "admin"
+         :password "admin"))
+(defn create-employee-table []
+  (sql/create-table
+    :employee
+    [:name "varchar(50)"]
+    [:occupation "varchar(50)"]
+    [:place "varchar(50)"]
+    [:country "varchar(50)"]))
+(def db (:subprotocol "postgresql"
+         :subname "//localhost/reporting"
+         :user "admin"
+         :password "admin"))
+(def db {:subprotocol "postgresql"
+         :subname "//localhost/reporting"
+         :user "admin"
+         :password "admin"})
+(sql/with-connection
+  db
+  (create-employee-table)
+  (sql/insert-rows
+    :employee
+    ["Albert Einstein", "Engineer", "Ulm", "Germany"]
+    ["Alfred Hitchcock", "Movie Director", "London", "UK"]
+    ["Wernher Von Braun", "Rocket Scientist", "Wyrzysk", "Poland"]
+    ["Sigmund Freud", "Neurologist", "Pribor", "Czech Republic"]
+    ["Mahatma Gandhi", "Lawyer", "Gujarat", "India"]
+    ["Sachin Tendulkar", "Cricket Player", "Mumbai", "India"]
+    ["Michael Schumacher", "F1 Racer", "Cologne", "Germany"]))
+(use '[reporting-example.models.db])
+(read-employees)
+(ns reporting-example.reports
+  (:require [clj-pdf.core :refer [pdf template]]))
+(pdf
+  [{:header "Wow that was easy"}
+   [:list
+    [:chunk {:style :bold} "A bold item"]
+    "another item"
+    "yet another item"]
+   [:paragraph "I'm a paragraph!"]]
+"doc.pdf")
