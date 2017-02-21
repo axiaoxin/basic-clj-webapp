@@ -43,3 +43,111 @@
     "yet another item"]
    [:paragraph "I'm a paragraph!"]]
 "doc.pdf")
+(use '[reporting-example.reports])
+(use '[reporting-example.models.db])
+(use '[reporting-example.reports])
+(use '[reporting-example.report])
+(use '[reporting-example])
+(use '[reporting_example.reports])
+(use '[reporting-example.models.db])
+(ns reporting-example.reports)
+(use '[reporting-example.reports])
+(require '[reporting-example.reports :refer [employee-template]])
+(ns reporting-example.reports
+  (:require [clj-pdf.core :refer [pdf template]]
+            [reporting-example.models.db :as db]))
+(use '[reporting-example.models.db])
+(use '[reporting-example.reports])
+(use '[reports])
+(use '[reporting-example.handler])
+(use '[reporting-example.reports])
+(use '[reporting-example.handler])
+(use '[reporting-example.reports])
+(employee-template (take 2 (db/read-employees))
+)
+(use '[reporting-example.reports])
+(employee-template (take 2 (db/read-employees)))
+(use '[reporting-example.models.db])
+(employee-template (take 2 (db/read-employees)))
+(use '[reporting-example.models.db :as db])
+(employee-template (take 2 (db/read-employees)))
+(use '[reporting-example.models.db])
+(employee-template (take 2 (read-employees)))
+(pdf
+  [{:header "Employee List"}
+    (into [:table
+            {:border false
+             :cell-border false
+             :header [{:color [0 150 150]} "Name" "Occupation" "Place" "Country"]}]
+          (employee-template (db/read-employees)))]
+   "report.pdf")
+(require '[clj-pdf.core :refer [pdf]])
+(pdf
+  [{:header "Employee List"}
+    (into [:table
+            {:border false
+             :cell-border false
+             :header [{:color [0 150 150]} "Name" "Occupation" "Place" "Country"]}]
+          (employee-template (db/read-employees)))]
+   "report.pdf")
+(def employee-template-paragraph
+  (template
+    [:paragraph
+      [:heading {:style {:size 5}} $name]
+      [:chunk {:style :bold} "occupation: "] $occupation "\n"
+      [:chunk {:style :bold} "place: "] $place "\n"
+      [:chunk {:style :bold} "country: "] $country
+      [:spacer]]))
+(pdf
+  [{}
+   [:heading {:size 10} "Employees"]
+   [:line]
+   [:spacer]
+   (employee-template-paragraph (db/read-employees))]
+ "report.pdf")
+(require '[clj-pdf.core :refer [pdf template]])
+(def employee-template-paragraph
+  (template
+    [:paragraph
+      [:heading {:style {:size 5}} $name]
+      [:chunk {:style :bold} "occupation: "] $occupation "\n"
+      [:chunk {:style :bold} "place: "] $place "\n"
+      [:chunk {:style :bold} "country: "] $country
+      [:spacer]]))
+(pdf
+  [{}
+   [:heading {:size 10} "Employees"]
+   [:line]
+   [:spacer]
+   (employee-template-paragraph (db/read-employees))]
+ "report.pdf")
+(def employee-template-paragraph
+  (template
+    [:paragraph
+      [:heading {:style {:size 5}} $name]
+      [:chunk {:style :bold} "occupation: "] $occupation "\n"
+      [:chunk {:style :bold} "place: "] $place "\n"
+      [:chunk {:style :bold} "country: "] $country
+      [:spacer]]))
+(pdf
+  [{}
+   [:heading {:size 10} "Employees"]
+   [:line]
+   [:spacer]
+   (employee-template-paragraph (db/read-employees))]
+ "report.pdf")
+(pdf
+  [{}
+   [:heading {:size 10} "Employees"]
+   [:line]
+   [:spacer]
+   (employee-template-paragraph (db/read-employees))]
+ "report-style.pdf")
+(pdf
+  [{:header "Employee List"}
+    (into [:table
+            {:border false
+             :cell-border false
+             :header [{:color [0 150 150]} "Name" "Occupation" "Place" "Country"]}]
+          (employee-template (db/read-employees)))]
+   "report.pdf")
